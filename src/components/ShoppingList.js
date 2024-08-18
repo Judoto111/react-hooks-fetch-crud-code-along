@@ -6,9 +6,30 @@ import Item from "./Item";
 function ShoppingList() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [items, setItems] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:3000/items")
+      .then((r) => r.json())
+      .then((items) => setItems(items));
+  }, []);
 
   function handleCategoryChange(category) {
     setSelectedCategory(category);
+  }
+  function handleAddItem(newItem) {
+    setItems([...items, newItem]);
+  }
+
+  function handleUpdateItem(updatedItem) {
+    const updatedItems = items.map((item) =>
+      item.id === updatedItem.id ? updatedItem : item
+    );
+    setItems(updatedItems);
+  }
+
+
+  function handleDeleteItem(deletedItem) {
+    const updatedItems = items.filter((item) => item.id !== deletedItem.id);
+    setItems(updatedItems);
   }
 
   const itemsToDisplay = items.filter((item) => {

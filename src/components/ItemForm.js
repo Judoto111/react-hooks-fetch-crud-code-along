@@ -3,6 +3,30 @@ import React, { useState } from "react";
 function ItemForm() {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Produce");
+  function handleSubmit(e) {
+    e.preventDefault();
+    const newItem = {
+      id: Date.now(), // Generates a unique ID based on the current time
+      name,
+      category,
+    };
+    onAddItem(newItem);
+    setName("");
+    setCategory("Produce");
+  }
+  fetch("http://localhost:3000/items", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newItem),
+  })
+    .then((r) => r.json())
+    .then((newItem) => onAddItem(newItem));
+
+  setName("");
+  setCategory("Produce");
+}
 
   return (
     <form className="NewItem">
@@ -32,6 +56,6 @@ function ItemForm() {
       <button type="submit">Add to List</button>
     </form>
   );
-}
+
 
 export default ItemForm;
